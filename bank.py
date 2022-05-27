@@ -8,7 +8,7 @@ class Account:
     def deposit(self,amount):
         self.amount=amount
         self.balance+=self.amount
-        return f"You deposited{self.amount} on the account {self.accountnumber} in the name of {self.accountname}. The balance is {self.balance} "
+        return f"You deposited {self.amount} on the account {self.accountnumber} in the name of {self.accountname}. The balance is {self.balance} "
     def withdraw(self,amount):
         self.amount=amount
         self.balance-=self.amount
