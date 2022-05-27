@@ -7,10 +7,10 @@ class Account:
     
     def deposit(self,amount):
         self.amount=amount
-        self.balance+=self.amount
-        return f"You deposited {self.amount} on the account {self.accountnumber} in the name of {self.accountname}. The balance is {self.balance} "
+        self.balance+=amount
+        return f"You deposited {amount} on the account {self.account_number} in the name of {self.account_name}. The balance is {self.balance} "
     def withdraw(self,amount):
         self.amount=amount
-        self.balance-=self.amount
-        return f"You withrawn {self.amount} on the account {self.accountnumber} in the name of {self.accountname}. The balance is {self.balance} "
+        self.balance-=amount
+        return f"You withrawn {amount} on the account {self.account_number} in the name of {self.account_name}. The balance is {self.balance} "
     
