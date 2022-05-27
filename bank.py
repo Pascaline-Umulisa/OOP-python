@@ -6,7 +6,6 @@ class Account:
         self.phone_number=phone_number
     
     def deposit(self,amount):
-        self.amount=amount
         self.balance+=amount
         return f"You deposited {amount} on the account {self.account_number} in the name of {self.account_name}. The balance is {self.balance} "
     def withdraw(self,amount):
