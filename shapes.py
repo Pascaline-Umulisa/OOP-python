@@ -1,12 +1,14 @@
+from cmath import pi
+
 class Circle:
-    pi=3.14
+   
     def __init__(self,r):
         self.radius=r
     def area(self):
-        a=self.pi*(self.radius**2)
+        a=pi*(self.radius**2)
         return a
     def circumference(self):
-        p=2*self.pi*self.radius
+        p=2*pi*self.radius
         return p
 class Square:
     def __init__(self,a):
@@ -30,12 +32,12 @@ class Rectangle:
         return p
 
 class Sphere:
-    pi=3.14
+
     def __init__(self,r):
         self.radius=r
     def surface_area(self):
-        a= 4* self.pi*(self.radius**2)
+        a= 4* pi*(self.radius**2)
         return a
     def volume(self):
-        v=(4/3)*(self.pi*(self.radius**3))
+        v=(4/3)*(pi*(self.radius**3))
         return v
