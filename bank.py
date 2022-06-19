@@ -1,5 +1,6 @@
-from hashlib import new
+from datetime import datetime
 
+current_time=datetime.now()
 
 class Account:
     def __init__(self,account_number,account_name):
@@ -8,6 +9,7 @@ class Account:
         self.balance=0
         self.deposits=[]
         self.withrawals=[]
+        self.loan_balance=0
         # self.phone_number=phone_number
     
     def deposit(self,amount):
@@ -15,8 +17,9 @@ class Account:
             return "The amount should be greater than zero"
         else:
             self.balance+=amount
-            deposit_details=f"You deposited {amount} KSH and the new balance was {self.balance} KSH"
+            deposit_details={"date":current_time.strftime('%d/%m/%y'),"amount":amount,"narration":f"You have deposited {amount} on {current_time} "}
             self.deposits.append(deposit_details)
+            # print(deposit_details)
             return f"You deposited {amount} KSH on the account {self.account_number} in the name of {self.account_name}. The balance is {self.balance} KSH"
     
     def withdraw(self,amount):
@@ -30,13 +33,13 @@ class Account:
         else:
             self.balance-=amount + transaction_fees
 
-            withdrawal_details=f"You withdrew {amount} and the new balance was {self.balance}"
+            withdrawal_details={"date":current_time.strftime('%d/%m/%y'),"amount":amount,"narration":f"You have withdrawn {amount} on {current_time} "}
             self.withrawals.append(withdrawal_details)
 
             return f"You withdrew {amount} KSH on the account {self.account_number} in the name of {self.account_name}. The balance is {self.balance} KSH"
     def deposit_statement(self):
         for a in self.deposits:
-            print(a)
+            return a
     
     def withdrawal_statement(self):
         for withdrawal in self.withrawals:
@@ -44,13 +47,87 @@ class Account:
 
     def Current_balance(self):
         return f"Your current balance is {self.balance} KSH."
+    def full_statement(self):
+        statement=self.deposits+self.withrawals
+        for a in statement:
+            print(a["narration"])
+    def borrow(self,amount):
+        deposit_sum=0
+        for a in self.deposits:
+            deposit_sum+=a["amount"]
+        if amount<=0:
+            return "invalid amount"
+        if len(self.deposits)<10:
+            return f"You can't borrow money because of few deposits made, make {10-len(self.deposits)} more deposits to qualify"
+        if amount<100:
+            return "You can only borrow atleast 100"
+        if amount> deposit_sum/3:
+            return f"You are not qualified to borrow this amount. You can borrow atmost {deposit_sum/3}"
+        if self.balance!=0:
+            return f"You have {self.balance} KSH in your balance so can't borrow when you have money"
+        if self.loan_balance!=0:
+            return f"YOu have unpaid loan of {self.loan_balance}, for you to borrow first clear the loan you have"
+        else:
+            interest=(3/100)*amount
+            self.loan_balance+=amount+interest
+            return f"You have borrowed {amount} and your loan balance to be paid is equal to {self.loan_balance}"
+    def loan_repayment(self,amount):
+        if amount<=0:
+            return "invalid amount"
+        if amount>self.loan_balance:
+            remainder=amount-self.loan_balance
+            self.loan_balance=0
+            self.deposit(remainder)
+            return f"Your loan balance is {self.loan_balance}."
+        else:
+            self.loan_balance-=amount
+            return f"You have paid a loan of {amount} KSH and your current loan balance is {self.loan_balance} "
+    def transfer(self,amount,instance):
+        if amount<=0:
+            return "invalid amount"
+        if amount>=self.balance:
+            return "insufficient amount"
+        if isinstance(instance,Account):
+            self.balance-=amount
+            instance.balance+=amount
+            return f"You have transfered {amount} KSH to {instance} account with the name of {instance.account_name}. Your new balance is {self.balance}"
 
 
-# Add a new attribute to the class Account called deposits which by default is an empty list.
-# Add another attribute to the class Account called withdrawals which by default is an empty list.
-# Modify the deposit method to append each successful deposit to self.deposits
-# Modify the withdrawal method to append each successful withdrawal to self.withdrawals
-# Add a new method called deposits_statement which using a for loop prints each deposit in a new line
-# Add a new method called withdrawals_statement which using a for loop prints each withdrawal in a new line
-# Modify the withdrawal method to include a transaction fee of 100 per transaction.
-# Add a method to show the current balance.
+        
+
+
+
+
+# Update the withdrawal method to store each withdrawal transaction as a dictionary like like this 
+# {
+#    "date": datetime object,
+#    "amount": amount,
+#    "narration": deposit or withdrawal
+# }
+
+# Update the deposit method to store each deposit transaction as a dictionary like this 
+# {
+#    "date": datetime object,
+#    "amount": amount,
+#    "narration": deposit or withdrawal
+# }
+
+# Add a new method  full_statement which combines both deposits and withdrawals into one list ordered by date and using a for loop prints each transaction in a new line like this
+# 16/06/22 —----- Deposit —---- 1000
+
+# Add a new attribute loan_balance which is zero by default.
+
+# Add a borrow method which allows a customer to borrow if they meet these conditions:
+# Customer has made at least 10 deposits.
+# Loan amount requested must be more than 100
+# A customer qualifies for a loan amount that is less than  or equal to 1/3 of their total sum of deposit history
+# Customer account has no has no balance
+# Customer has no outstanding loan
+# The loan attracts  an interest of 3%.
+
+# Add a loan repayment method with these conditions
+# A customer can repay a loan to reduce the current loan balance
+# Overpayment of a loan increases a customers current deposit
+
+# Add a new method transfer which accepts two attributes (amount and instance of another account). If the amount is less than the current instances balance, the method transfers the requested amount from the current account to the passed account. The transfer is accomplished by reducing the current account balance and depositing the requested amount to the passed account.
+
