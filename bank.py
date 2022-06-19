@@ -17,7 +17,7 @@ class Account:
             return "The amount should be greater than zero"
         else:
             self.balance+=amount
-            deposit_details={"date":datetime.now().strftime('%d/%m/%y'),"amount":amount,"narration":f"You have deposited {amount} on {datetime.now} "}
+            deposit_details={"date":datetime.now().strftime('%d/%m/%y'),"amount":amount,"narration":f"You have deposited {amount} on {datetime.now()} "}
             self.deposits.append(deposit_details)
             # print(deposit_details)
             return f"You deposited {amount} KSH on the account {self.account_number} in the name of {self.account_name}. The balance is {self.balance} KSH"
@@ -28,8 +28,7 @@ class Account:
         
         if amount>withrawable_amount:
             return f"insufficient funds"
-        elif amount<=0:
-            return f"The amount must be greater than zero"
+
         else:
             self.balance-=amount + transaction_fees
 
@@ -62,7 +61,7 @@ class Account:
         if amount<100:
             return "You can only borrow atleast 100"
         if self.balance!=0:
-            return f"You have {self.balance} KSH in your balance so can't borrow when you have money"
+            return f"You have {self.balance} KSH in your balance. For you to balance your balance must be equal to zero"
         if amount> deposit_sum/3:
             return f"You are not qualified to borrow this amount. You can borrow atmost {deposit_sum/3}"
         if self.loan_balance!=0:
@@ -86,10 +85,10 @@ class Account:
             return "invalid amount"
         if amount>=self.balance:
             return "insufficient amount"
-        if isinstance(instance_name,Account):
+        if isinstance(instance_name,Account)
             self.balance-=amount
             instance_name.balance+=amount
-            return f"You have transfered {amount} KSH to {instance_name} account with the name of {instance_name.account_name}. Your new balance is {self.balance}"
+            return f"You have transfered {amount} KSH to the account with the name of {instance_name.account_name}. Your new balance is {self.balance}"
 
 
         
