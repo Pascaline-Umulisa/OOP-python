@@ -85,7 +85,7 @@ class Account:
             return "invalid amount"
         if amount>=self.balance:
             return "insufficient amount"
-        if isinstance(instance_name,Account)
+        else:
             self.balance-=amount
             instance_name.balance+=amount
             return f"You have transfered {amount} KSH to the account with the name of {instance_name.account_name}. Your new balance is {self.balance}"
