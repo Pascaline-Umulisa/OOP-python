@@ -1,6 +1,6 @@
 from datetime import datetime
 
-current_time=datetime.now()
+# current_time=datetime.now()
 
 class Account:
     def __init__(self,account_number,account_name):
@@ -10,14 +10,14 @@ class Account:
         self.deposits=[]
         self.withrawals=[]
         self.loan_balance=0
-        # self.phone_number=phone_number
+
     
     def deposit(self,amount):
         if amount<=0:
             return "The amount should be greater than zero"
         else:
             self.balance+=amount
-            deposit_details={"date":current_time.strftime('%d/%m/%y'),"amount":amount,"narration":f"You have deposited {amount} on {current_time} "}
+            deposit_details={"date":datetime.now().strftime('%d/%m/%y'),"amount":amount,"narration":f"You have deposited {amount} on {datetime.now} "}
             self.deposits.append(deposit_details)
             # print(deposit_details)
             return f"You deposited {amount} KSH on the account {self.account_number} in the name of {self.account_name}. The balance is {self.balance} KSH"
@@ -33,7 +33,7 @@ class Account:
         else:
             self.balance-=amount + transaction_fees
 
-            withdrawal_details={"date":current_time.strftime('%d/%m/%y'),"amount":amount,"narration":f"You have withdrawn {amount} on {current_time} "}
+            withdrawal_details={"date":datetime.now().strftime('%d/%m/%y'),"amount":amount,"narration":f"You have withdrawn {amount} on {datetime.now()} "}
             self.withrawals.append(withdrawal_details)
 
             return f"You withdrew {amount} KSH on the account {self.account_number} in the name of {self.account_name}. The balance is {self.balance} KSH"
@@ -61,10 +61,10 @@ class Account:
             return f"You can't borrow money because of few deposits made, make {10-len(self.deposits)} more deposits to qualify"
         if amount<100:
             return "You can only borrow atleast 100"
-        if amount> deposit_sum/3:
-            return f"You are not qualified to borrow this amount. You can borrow atmost {deposit_sum/3}"
         if self.balance!=0:
             return f"You have {self.balance} KSH in your balance so can't borrow when you have money"
+        if amount> deposit_sum/3:
+            return f"You are not qualified to borrow this amount. You can borrow atmost {deposit_sum/3}"
         if self.loan_balance!=0:
             return f"YOu have unpaid loan of {self.loan_balance}, for you to borrow first clear the loan you have"
         else:
@@ -77,20 +77,19 @@ class Account:
         if amount>self.loan_balance:
             remainder=amount-self.loan_balance
             self.loan_balance=0
-            self.deposit(remainder)
-            return f"Your loan balance is {self.loan_balance}."
+            return f"Your loan balance is {self.loan_balance} { self.deposit(remainder)}"
         else:
             self.loan_balance-=amount
             return f"You have paid a loan of {amount} KSH and your current loan balance is {self.loan_balance} "
-    def transfer(self,amount,instance):
+    def transfer(self,amount,instance_name):
         if amount<=0:
             return "invalid amount"
         if amount>=self.balance:
             return "insufficient amount"
-        if isinstance(instance,Account):
+        if isinstance(instance_name,Account):
             self.balance-=amount
-            instance.balance+=amount
-            return f"You have transfered {amount} KSH to {instance} account with the name of {instance.account_name}. Your new balance is {self.balance}"
+            instance_name.balance+=amount
+            return f"You have transfered {amount} KSH to {instance_name} account with the name of {instance_name.account_name}. Your new balance is {self.balance}"
 
 
         
