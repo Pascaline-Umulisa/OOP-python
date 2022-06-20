@@ -16,6 +16,7 @@ class Account:
         if amount<=0:
             return "The amount should be greater than zero"
         else:
+        # .strftime('%d/%m/%y')
             self.balance+=amount
             deposit_details={"date":datetime.now().strftime('%d/%m/%y'),"amount":amount,"narration":f"You have deposited {amount} on {datetime.now()} "}
             self.deposits.append(deposit_details)
@@ -37,8 +38,8 @@ class Account:
 
             return f"You withdrew {amount} KSH on the account {self.account_number} in the name of {self.account_name}. The balance is {self.balance} KSH"
     def deposit_statement(self):
-        for a in self.deposits:
-            return a
+        for deposit in self.deposits:
+            return deposit
     
     def withdrawal_statement(self):
         for withdrawal in self.withrawals:
@@ -49,7 +50,11 @@ class Account:
     def full_statement(self):
         statement=self.deposits+self.withrawals
         for a in statement:
-            print(a["narration"])
+            if a in self.deposits:
+                print(f"{a['date']}_____deposit____-{a['amount']} ")
+            elif a in self.withrawals:
+                print(f"{a['date']}_____withrawal____ {a['amount']}" )
+           
     def borrow(self,amount):
         deposit_sum=0
         for a in self.deposits:
