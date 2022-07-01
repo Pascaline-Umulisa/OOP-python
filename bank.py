@@ -18,7 +18,7 @@ class Account:
         else:
         # .strftime('%d/%m/%y')
             self.balance+=amount
-            deposit_details={"date":datetime.now().strftime('%d/%m/%y'),"amount":amount,"narration":f"You have deposited {amount} on {datetime.now()} "}
+            deposit_details={"date":datetime.now().strftime('%d/%m/%y'),"amount":amount,"narration":f"deposit"}
             self.deposits.append(deposit_details)
             # print(deposit_details)
             return f"You deposited {amount} KSH on the account {self.account_number} in the name of {self.account_name}. The balance is {self.balance} KSH"
@@ -33,7 +33,7 @@ class Account:
         else:
             self.balance-=amount + transaction_fees
 
-            withdrawal_details={"date":datetime.now().strftime('%d/%m/%y'),"amount":amount,"narration":f"You have withdrawn {amount} on {datetime.now()} "}
+            withdrawal_details={"date":datetime.now().strftime('%d/%m/%y'),"amount":amount,"narration":f"withdrawal"}
             self.withrawals.append(withdrawal_details)
 
             return f"You withdrew {amount} KSH on the account {self.account_number} in the name of {self.account_name}. The balance is {self.balance} KSH"
@@ -50,10 +50,9 @@ class Account:
     def full_statement(self):
         statement=self.deposits+self.withrawals
         for a in statement:
-            if a in self.deposits:
-                print(f"{a['date']}_____deposit____-{a['amount']} ")
-            elif a in self.withrawals:
-                print(f"{a['date']}_____withrawal____ {a['amount']}" )
+                statement.sort(key=lambda a: a['date'])
+                print(f"{a['date']}_____ {a['narration']} ____-{a['amount']} ")
+           
            
     def borrow(self,amount):
         deposit_sum=0
@@ -74,6 +73,7 @@ class Account:
         else:
             interest=(3/100)*amount
             self.loan_balance+=amount+interest
+            self.balance+=amount
             return f"You have borrowed {amount} and your loan balance to be paid is equal to {self.loan_balance}"
     def loan_repayment(self,amount):
         if amount<=0:
@@ -88,11 +88,11 @@ class Account:
     def transfer(self,amount,instance_name):
         if amount<=0:
             return "invalid amount"
-        if amount>=self.balance:
+        elif amount>=self.balance:
             return "insufficient amount"
-        else:
+        elif isinstance(instance_name,Account):
             self.balance-=amount
-            instance_name.balance+=amount
+            instance_name.deposit(amount)
             return f"You have transfered {amount} KSH to the account with the name of {instance_name.account_name}. Your new balance is {self.balance}"
 
 
